@@ -205,4 +205,4 @@ The pipeline helps validate UI and API automation during code changes.
 
 Senior Test Engineer | QA Automation | Playwright | TypeScript | API Testing | Quality Engineering
 
-[LinkedIn](https://www.linkedin.com/in/namra-kanwal683316154) | [GitHub](https://github.com/namrakanwal-10p)
+[LinkedIn](www.linkedin.com/in/namra-kanwal-qa) | [GitHub](https://github.com/namrakanwal-10p)
