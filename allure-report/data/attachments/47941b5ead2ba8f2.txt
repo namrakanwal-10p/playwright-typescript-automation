@@ -1,0 +1,29 @@
+
+========== API-002 RESPONSE ==========
+Booking ID: 1
+HTTP Status: 200
+Response Headers: {
+  'content-length': '142',
+  'content-type': 'application/json; charset=utf-8',
+  date: 'Mon, 02 Nov 2026 15:21:24 GMT',
+  etag: 'W/"8e-0DAYh1vLEPOJCrEgCjyc4Yr/czo"',
+  nel: '{"report_to":"heroku-nel","response_headers":["Via"],"max_age":3600,"success_fraction":0.01,"failure_fraction":0.1}',
+  'report-to': '{"group":"heroku-nel","endpoints":[{"url":"https://nel.heroku.com/reports?s=aiNiWyDVMQkJdcpxCHqkOgET6kdl6iq%2F%2B2OrrCXwA20%3D\\u0026sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add\\u0026ts=1793632884"}],"max_age":3600}',
+  'reporting-endpoints': 'heroku-nel="https://nel.heroku.com/reports?s=aiNiWyDVMQkJdcpxCHqkOgET6kdl6iq%2F%2B2OrrCXwA20%3D&sid=c46efe9b-d3d2-4a0c-8c76-bfafa16c5add&ts=1793632884"',
+  server: 'Heroku',
+  via: '1.1 heroku-router',
+  'x-powered-by': 'Express'
+}
+Response Body:
+{
+  "firstname": "Mary",
+  "lastname": "Jackson",
+  "totalprice": 471,
+  "depositpaid": false,
+  "bookingdates": {
+    "checkin": "2022-05-23",
+    "checkout": "2026-02-13"
+  }
+}
+======================================
+

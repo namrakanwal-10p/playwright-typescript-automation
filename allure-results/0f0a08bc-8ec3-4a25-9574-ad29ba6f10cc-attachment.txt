@@ -1,0 +1,34 @@
+
+========== API-004 CREATED BOOKING ==========
+New Booking ID: 3274
+{
+  "bookingid": 3274,
+  "booking": {
+    "firstname": "Namra",
+    "lastname": "Kanwal",
+    "totalprice": 1500,
+    "depositpaid": true,
+    "bookingdates": {
+      "checkin": "2026-11-01",
+      "checkout": "2026-11-05"
+    },
+    "additionalneeds": "Breakfast"
+  }
+}
+
+========== API-004 GET RESPONSE ==========
+HTTP Status: 200
+Response Body:
+{
+  "firstname": "Namra",
+  "lastname": "Kanwal",
+  "totalprice": 1500,
+  "depositpaid": true,
+  "bookingdates": {
+    "checkin": "2026-11-01",
+    "checkout": "2026-11-05"
+  },
+  "additionalneeds": "Breakfast"
+}
+============================================
+

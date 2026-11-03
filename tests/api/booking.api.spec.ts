@@ -1,6 +1,7 @@
 
 import { test, expect } from '@playwright/test';
 import { bookingTestData } from '../../test-data/bookingTestData';
+import * as allure from 'allure-js-commons';
 
 const API_URL = 'https://restful-booker.herokuapp.com';
 
@@ -9,149 +10,204 @@ test.describe('Restful Booker API Tests', () => {
   // API-001: Get all booking IDs
   test('API-001: Verify GET all bookings', async ({ request }) => {
 
-    const response = await request.get(`${API_URL}/booking`);
-    const responseBody = await response.json();
+    await allure.feature('API Testing');
+    await allure.story('GET All Bookings');
+    await allure.severity('critical');
+    await allure.description(
+      'Verify that the API returns a list of booking IDs with a successful HTTP response.'
+    );
 
-    console.log('\n========== API-001 RESPONSE ==========');
-    console.log('HTTP Status:', response.status());
-    console.log('Response Headers:', response.headers());
-    console.log('Response Body:');
-    console.log(JSON.stringify(responseBody, null, 2));
-    console.log('======================================\n');
+    let responseBody: any;
 
-    expect(response.status()).toBe(200);
-    expect(Array.isArray(responseBody)).toBeTruthy();
-    expect(responseBody.length).toBeGreaterThan(0);
-    expect(responseBody[0]).toHaveProperty('bookingid');
+    await allure.step('Send GET request to retrieve all bookings', async () => {
+      const response = await request.get(`${API_URL}/booking`);
+      responseBody = await response.json();
+
+      console.log('\n========== API-001 RESPONSE ==========');
+      console.log('HTTP Status:', response.status());
+      console.log('Response Headers:', response.headers());
+      console.log('Response Body:');
+      console.log(JSON.stringify(responseBody, null, 2));
+      console.log('======================================\n');
+
+      expect(response.status()).toBe(200);
+    });
+
+    await allure.step('Validate booking IDs in response', async () => {
+      expect(Array.isArray(responseBody)).toBeTruthy();
+      expect(responseBody.length).toBeGreaterThan(0);
+      expect(responseBody[0]).toHaveProperty('bookingid');
+    });
   });
 
 
   // API-002: Get booking details
   test('API-002: Verify GET booking details', async ({ request }) => {
 
-    const listResponse = await request.get(`${API_URL}/booking`);
-    const bookings = await listResponse.json();
-
-    expect(listResponse.status()).toBe(200);
-    expect(bookings.length).toBeGreaterThan(0);
-
-    const bookingId = bookings[0].bookingid;
-
-    const response = await request.get(
-      `${API_URL}/booking/${bookingId}`
+    await allure.feature('API Testing');
+    await allure.story('GET Booking Details');
+    await allure.severity('critical');
+    await allure.description(
+      'Verify that the API returns booking details for an existing booking ID.'
     );
 
-    const responseBody = await response.json();
+    let responseBody: any;
+    let bookingId: number;
 
-    console.log('\n========== API-002 RESPONSE ==========');
-    console.log('Booking ID:', bookingId);
-    console.log('HTTP Status:', response.status());
-    console.log('Response Headers:', response.headers());
-    console.log('Response Body:');
-    console.log(JSON.stringify(responseBody, null, 2));
-    console.log('======================================\n');
+    await allure.step('Retrieve available booking IDs', async () => {
+      const listResponse = await request.get(`${API_URL}/booking`);
+      const bookings = await listResponse.json();
 
-    expect(response.status()).toBe(200);
-    expect(responseBody).toHaveProperty('firstname');
-    expect(responseBody).toHaveProperty('lastname');
-    expect(responseBody).toHaveProperty('bookingdates');
+      expect(listResponse.status()).toBe(200);
+      expect(bookings.length).toBeGreaterThan(0);
+
+      bookingId = bookings[0].bookingid;
+    });
+
+    await allure.step('Send GET request using booking ID', async () => {
+      const response = await request.get(
+        `${API_URL}/booking/${bookingId}`
+      );
+
+      responseBody = await response.json();
+
+      console.log('\n========== API-002 RESPONSE ==========');
+      console.log('Booking ID:', bookingId);
+      console.log('HTTP Status:', response.status());
+      console.log('Response Headers:', response.headers());
+      console.log('Response Body:');
+      console.log(JSON.stringify(responseBody, null, 2));
+      console.log('======================================\n');
+
+      expect(response.status()).toBe(200);
+    });
+
+    await allure.step('Validate booking details in response', async () => {
+      expect(responseBody).toHaveProperty('firstname');
+      expect(responseBody).toHaveProperty('lastname');
+      expect(responseBody).toHaveProperty('bookingdates');
+    });
   });
 
 
   // API-003: Create a new booking using POST
   test('API-003: Create a new booking', async ({ request }) => {
 
-    const requestPayload = bookingTestData.validBooking;
+    await allure.feature('API Testing');
+    await allure.story('POST Create Booking');
+    await allure.severity('critical');
+    await allure.description(
+      'Verify that a new booking can be created and the API returns the correct booking details.'
+    );
 
-    const response = await request.post(`${API_URL}/booking`, {
-      data: requestPayload
+    const requestPayload = bookingTestData.validBooking;
+    let responseBody: any;
+
+    await allure.step('Send POST request with booking payload', async () => {
+      const response = await request.post(`${API_URL}/booking`, {
+        data: requestPayload
+      });
+
+      responseBody = await response.json();
+
+      console.log('\n========== API-003 POST REQUEST ==========');
+      console.log('Request URL:', `${API_URL}/booking`);
+      console.log('Request Method: POST');
+      console.log('Request Payload:');
+      console.log(JSON.stringify(requestPayload, null, 2));
+      console.log('\nHTTP Status:', response.status());
+      console.log('Response Headers:', response.headers());
+      console.log('Response Body:');
+      console.log(JSON.stringify(responseBody, null, 2));
+      console.log('==========================================\n');
+
+      expect(response.status()).toBe(200);
     });
 
-    const responseBody = await response.json();
+    await allure.step('Validate newly created booking details', async () => {
+      expect(responseBody).toHaveProperty('bookingid');
+      expect(responseBody.bookingid).toBeGreaterThan(0);
 
-    console.log('\n========== API-003 POST REQUEST ==========');
-    console.log('Request URL:', `${API_URL}/booking`);
-    console.log('Request Method: POST');
-    console.log('Request Payload:');
-    console.log(JSON.stringify(requestPayload, null, 2));
+      expect(responseBody.booking.firstname)
+        .toBe(requestPayload.firstname);
 
-    console.log('\nHTTP Status:', response.status());
-    console.log('Response Headers:', response.headers());
-    console.log('Response Body:');
-    console.log(JSON.stringify(responseBody, null, 2));
-    console.log('==========================================\n');
+      expect(responseBody.booking.lastname)
+        .toBe(requestPayload.lastname);
 
-    // Validate response
-    expect(response.status()).toBe(200);
-    expect(responseBody).toHaveProperty('bookingid');
-    expect(responseBody.bookingid).toBeGreaterThan(0);
+      expect(responseBody.booking.totalprice)
+        .toBe(requestPayload.totalprice);
 
-    expect(responseBody.booking.firstname)
-      .toBe(requestPayload.firstname);
-
-    expect(responseBody.booking.lastname)
-      .toBe(requestPayload.lastname);
-
-    expect(responseBody.booking.totalprice)
-      .toBe(requestPayload.totalprice);
-
-    expect(responseBody.booking.depositpaid)
-      .toBe(requestPayload.depositpaid);
+      expect(responseBody.booking.depositpaid)
+        .toBe(requestPayload.depositpaid);
+    });
   });
 
 
   // API-004: Create booking and retrieve it using booking ID
   test('API-004: Verify created booking using GET', async ({ request }) => {
 
-    const requestPayload = bookingTestData.validBooking;
-
-    // Create booking
-    const postResponse = await request.post(`${API_URL}/booking`, {
-      data: requestPayload
-    });
-
-    expect(postResponse.status()).toBe(200);
-
-    const postResponseBody = await postResponse.json();
-    const bookingId = postResponseBody.bookingid;
-
-    console.log('\n========== API-004 CREATED BOOKING ==========');
-    console.log('New Booking ID:', bookingId);
-    console.log(JSON.stringify(postResponseBody, null, 2));
-
-    // Retrieve newly created booking
-    const getResponse = await request.get(
-      `${API_URL}/booking/${bookingId}`
+    await allure.feature('API Testing');
+    await allure.story('POST and GET Booking Verification');
+    await allure.severity('critical');
+    await allure.description(
+      'Verify that a newly created booking can be retrieved using its booking ID and that the returned data matches the original request.'
     );
 
-    const getResponseBody = await getResponse.json();
+    const requestPayload = bookingTestData.validBooking;
+    let bookingId: number;
 
-    console.log('\n========== API-004 GET RESPONSE ==========');
-    console.log('HTTP Status:', getResponse.status());
-    console.log('Response Body:');
-    console.log(JSON.stringify(getResponseBody, null, 2));
-    console.log('============================================\n');
+    await allure.step('Create a new booking using POST', async () => {
+      const postResponse = await request.post(`${API_URL}/booking`, {
+        data: requestPayload
+      });
 
-    // Validate retrieved booking
-    expect(getResponse.status()).toBe(200);
+      expect(postResponse.status()).toBe(200);
 
-    expect(getResponseBody.firstname)
-      .toBe(requestPayload.firstname);
+      const postResponseBody = await postResponse.json();
+      bookingId = postResponseBody.bookingid;
 
-    expect(getResponseBody.lastname)
-      .toBe(requestPayload.lastname);
+      console.log('\n========== API-004 CREATED BOOKING ==========');
+      console.log('New Booking ID:', bookingId);
+      console.log(JSON.stringify(postResponseBody, null, 2));
+    });
 
-    expect(getResponseBody.totalprice)
-      .toBe(requestPayload.totalprice);
+    let getResponseBody: any;
 
-    expect(getResponseBody.depositpaid)
-      .toBe(requestPayload.depositpaid);
+    await allure.step('Retrieve the newly created booking using GET', async () => {
+      const getResponse = await request.get(
+        `${API_URL}/booking/${bookingId}`
+      );
 
-    expect(getResponseBody.bookingdates.checkin)
-      .toBe(requestPayload.bookingdates.checkin);
+      getResponseBody = await getResponse.json();
 
-    expect(getResponseBody.bookingdates.checkout)
-      .toBe(requestPayload.bookingdates.checkout);
+      console.log('\n========== API-004 GET RESPONSE ==========');
+      console.log('HTTP Status:', getResponse.status());
+      console.log('Response Body:');
+      console.log(JSON.stringify(getResponseBody, null, 2));
+      console.log('============================================\n');
+
+      expect(getResponse.status()).toBe(200);
+    });
+
+    await allure.step('Compare retrieved booking with original request data', async () => {
+      expect(getResponseBody.firstname)
+        .toBe(requestPayload.firstname);
+
+      expect(getResponseBody.lastname)
+        .toBe(requestPayload.lastname);
+
+      expect(getResponseBody.totalprice)
+        .toBe(requestPayload.totalprice);
+
+      expect(getResponseBody.depositpaid)
+        .toBe(requestPayload.depositpaid);
+
+      expect(getResponseBody.bookingdates.checkin)
+        .toBe(requestPayload.bookingdates.checkin);
+
+      expect(getResponseBody.bookingdates.checkout)
+        .toBe(requestPayload.bookingdates.checkout);
+    });
   });
 
 });

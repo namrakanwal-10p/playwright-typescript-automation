@@ -1,0 +1,8 @@
+Created Booking ID: 3161
+
+========== DELETED BOOKING VERIFICATION ==========
+Booking ID: 3161
+GET HTTP Status: 404
+Response Body: Not Found
+==================================================
+

@@ -1,0 +1,9 @@
+Authentication token generated successfully.
+Created Booking ID: 4757
+
+========== PUT API RESPONSE ==========
+Booking ID: 4757
+HTTP Status: 200
+Response Body: {"firstname":"Namra Updated","lastname":"Kanwal Updated","totalprice":2500,"depositpaid":true,"bookingdates":{"checkin":"2026-11-20","checkout":"2026-11-25"},"additionalneeds":"Lunch"}
+======================================
+

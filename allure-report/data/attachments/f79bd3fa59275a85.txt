@@ -1,0 +1,8 @@
+Created Booking ID: 1877
+
+========== DELETED BOOKING VERIFICATION ==========
+Booking ID: 1877
+GET HTTP Status: 404
+Response Body: Not Found
+==================================================
+

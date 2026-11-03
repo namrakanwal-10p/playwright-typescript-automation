@@ -1,0 +1,8 @@
+Created Booking ID: 1873
+
+========== DELETE API RESPONSE ==========
+Booking ID: 1873
+HTTP Status: 201
+Response Body: Created
+=========================================
+

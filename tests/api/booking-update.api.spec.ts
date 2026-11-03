@@ -1,138 +1,109 @@
 
 import { test, expect } from '@playwright/test';
-import { ApiHelper } from '../../utils/ApiHelper';
-import { bookingTestData } from '../../test-data/bookingTestData';
+import * as allure from 'allure-js-commons';
 
 const API_URL = 'https://restful-booker.herokuapp.com';
 
-test.describe('Restful Booker PUT and PATCH API Tests', () => {
+test.describe('Booking PUT API Tests', () => {
 
-  // API-005: Update complete booking using PUT
   test('API-005: Update complete booking using PUT', async ({ request }) => {
 
-    // Step 1: Generate authentication token
-    const token = await ApiHelper.generateAuthToken(request);
+    await allure.feature('API Testing');
+    await allure.story('PUT Complete Booking Update');
+    await allure.severity('critical');
+    await allure.description(
+      'Verify that an authenticated user can completely update an existing booking.'
+    );
 
-    // Step 2: Create a booking
-    const createResponse = await request.post(`${API_URL}/booking`, {
-      data: bookingTestData.validBooking
+    // Declare variables inside the test scope
+    let bookingId = 0;
+    let authToken = '';
+
+    await allure.step('Generate authentication token', async () => {
+      const authResponse = await request.post(`${API_URL}/auth`, {
+        data: {
+          username: 'admin',
+          password: 'password123'
+        }
+      });
+
+      expect(authResponse.status()).toBe(200);
+
+      const authData = await authResponse.json();
+      authToken = authData.token;
+
+      expect(authToken).toBeTruthy();
+
+      console.log('Authentication token generated successfully.');
     });
 
-    expect(createResponse.status()).toBe(200);
+    await allure.step('Create a booking', async () => {
+      const createResponse = await request.post(`${API_URL}/booking`, {
+        data: {
+          firstname: 'Namra',
+          lastname: 'Kanwal',
+          totalprice: 1500,
+          depositpaid: true,
+          bookingdates: {
+            checkin: '2026-11-10',
+            checkout: '2026-11-15'
+          },
+          additionalneeds: 'Breakfast'
+        }
+      });
 
-    const createdBooking = await createResponse.json();
-    const bookingId = createdBooking.bookingid;
+      expect(createResponse.status()).toBe(200);
 
-    console.log('\nCreated Booking ID:', bookingId);
+      const createData = await createResponse.json();
+      bookingId = createData.bookingid;
 
-    // Step 3: Prepare complete updated booking
-    const updatedBooking = {
-      firstname: 'Namra Updated',
-      lastname: 'Kanwal Updated',
-      totalprice: 2500,
-      depositpaid: true,
-      bookingdates: {
-        checkin: '2026-11-10',
-        checkout: '2026-11-15'
-      },
-      additionalneeds: 'Lunch'
-    };
-
-    // Step 4: Send PUT request
-    const response = await request.put(
-      `${API_URL}/booking/${bookingId}`,
-      {
-        headers: {
-          Cookie: `token=${token}`,
-          Accept: 'application/json'
-        },
-        data: updatedBooking
-      }
-    );
-
-    const responseBody = await response.json();
-
-    // Step 5: Print response
-    console.log('\n========== API-005 PUT RESPONSE ==========');
-    console.log('Booking ID:', bookingId);
-    console.log('HTTP Status:', response.status());
-    console.log('Updated Request Payload:');
-    console.log(JSON.stringify(updatedBooking, null, 2));
-    console.log('Response Body:');
-    console.log(JSON.stringify(responseBody, null, 2));
-    console.log('==========================================\n');
-
-    // Step 6: Validate updated booking
-    expect(response.status()).toBe(200);
-    expect(responseBody.firstname).toBe(updatedBooking.firstname);
-    expect(responseBody.lastname).toBe(updatedBooking.lastname);
-    expect(responseBody.totalprice).toBe(updatedBooking.totalprice);
-    expect(responseBody.additionalneeds).toBe(updatedBooking.additionalneeds);
-
-  });
-
-
-  // API-006: Update selected booking fields using PATCH
-  test('API-006: Update selected booking fields using PATCH', async ({ request }) => {
-
-    // Step 1: Generate authentication token
-    const token = await ApiHelper.generateAuthToken(request);
-
-    // Step 2: Create a booking
-    const createResponse = await request.post(`${API_URL}/booking`, {
-      data: bookingTestData.validBooking
+      console.log('Created Booking ID:', bookingId);
     });
 
-    expect(createResponse.status()).toBe(200);
-
-    const createdBooking = await createResponse.json();
-    const bookingId = createdBooking.bookingid;
-
-    console.log('\nCreated Booking ID:', bookingId);
-
-    // Step 3: Prepare partial update payload
-    const partialUpdate = {
-      firstname: 'Namra PATCH Updated',
-      totalprice: 3000
-    };
-
-    // Step 4: Send PATCH request
-    const response = await request.patch(
-      `${API_URL}/booking/${bookingId}`,
-      {
-        headers: {
-          Cookie: `token=${token}`,
-          Accept: 'application/json'
+    await allure.step('Update complete booking using PUT', async () => {
+      const updatedBooking = {
+        firstname: 'Namra Updated',
+        lastname: 'Kanwal Updated',
+        totalprice: 2500,
+        depositpaid: true,
+        bookingdates: {
+          checkin: '2026-11-20',
+          checkout: '2026-11-25'
         },
-        data: partialUpdate
-      }
-    );
+        additionalneeds: 'Lunch'
+      };
 
-    const responseBody = await response.json();
+      const putResponse = await request.put(
+        `${API_URL}/booking/${bookingId}`,
+        {
+          headers: {
+            Cookie: `token=${authToken}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          data: updatedBooking
+        }
+      );
 
-    // Step 5: Print response
-    console.log('\n========== API-006 PATCH RESPONSE ==========');
-    console.log('Booking ID:', bookingId);
-    console.log('HTTP Status:', response.status());
-    console.log('Partial Update Payload:');
-    console.log(JSON.stringify(partialUpdate, null, 2));
-    console.log('Response Body:');
-    console.log(JSON.stringify(responseBody, null, 2));
-    console.log('============================================\n');
+      const responseBody = await putResponse.text();
 
-    // Step 6: Validate updated fields
-    expect(response.status()).toBe(200);
-    expect(responseBody.firstname).toBe(partialUpdate.firstname);
-    expect(responseBody.totalprice).toBe(partialUpdate.totalprice);
+      console.log('\n========== PUT API RESPONSE ==========');
+      console.log('Booking ID:', bookingId);
+      console.log('HTTP Status:', putResponse.status());
+      console.log('Response Body:', responseBody);
+      console.log('======================================\n');
 
-    // Verify fields not included in PATCH remain unchanged
-    expect(responseBody.lastname).toBe(
-      bookingTestData.validBooking.lastname
-    );
+      expect(putResponse.status()).toBe(200);
 
-    expect(responseBody.additionalneeds).toBe(
-      bookingTestData.validBooking.additionalneeds
-    );
+      const responseData = JSON.parse(responseBody);
+
+      expect(responseData.firstname).toBe('Namra Updated');
+      expect(responseData.lastname).toBe('Kanwal Updated');
+      expect(responseData.totalprice).toBe(2500);
+      expect(responseData.additionalneeds).toBe('Lunch');
+      expect(responseData.bookingdates.checkin).toBe('2026-11-20');
+      expect(responseData.bookingdates.checkout).toBe('2026-11-25');
+    });
 
   });
 

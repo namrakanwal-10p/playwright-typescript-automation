@@ -1,0 +1,8 @@
+Created Booking ID: 3142
+
+========== DELETE API RESPONSE ==========
+Booking ID: 3142
+HTTP Status: 201
+Response Body: Created
+=========================================
+

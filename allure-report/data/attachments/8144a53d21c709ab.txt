@@ -1,0 +1,9 @@
+Authentication token generated successfully.
+Created Booking ID: 230
+
+========== PUT API RESPONSE ==========
+Booking ID: 230
+HTTP Status: 200
+Response Body: {"firstname":"Namra Updated","lastname":"Kanwal Updated","totalprice":2500,"depositpaid":true,"bookingdates":{"checkin":"2026-11-10","checkout":"2026-11-15"},"additionalneeds":"Lunch"}
+======================================
+

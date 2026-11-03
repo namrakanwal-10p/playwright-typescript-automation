@@ -1,0 +1,10 @@
+
+========== AUTH API RESPONSE ==========
+HTTP Status: 200
+Token Generated: true
+Response Body:
+{
+  "token": "********"
+}
+=======================================
+

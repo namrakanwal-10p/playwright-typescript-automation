@@ -1,0 +1,8 @@
+Created Booking ID: 4711
+
+========== DELETE API RESPONSE ==========
+Booking ID: 4711
+HTTP Status: 201
+Response Body: Created
+=========================================
+

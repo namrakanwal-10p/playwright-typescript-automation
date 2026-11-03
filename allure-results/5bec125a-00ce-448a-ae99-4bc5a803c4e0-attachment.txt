@@ -1,0 +1,2 @@
+Invalid Booking ID Status: 404
+Response Body: Not Found

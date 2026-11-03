@@ -9,10 +9,11 @@ export default defineConfig({
   retries: 0,
   workers: 4,
 
-  reporter: [
-    ['list'],
-    ['html', { open: 'never' }]
-  ],
+ reporter: [
+  ['list'],
+  ['html', { open: 'never' }],
+  ['allure-playwright']
+],
 
   use: {
     baseURL: 'https://www.saucedemo.com',

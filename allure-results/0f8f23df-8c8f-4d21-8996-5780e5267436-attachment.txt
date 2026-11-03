@@ -1,0 +1,35 @@
+
+========== AUTH API RESPONSE ==========
+HTTP Status: 200
+Token Generated: true
+Response Body:
+{
+  "token": "********"
+}
+=======================================
+
+
+Created Booking ID: 2229
+
+========== API-006 PATCH RESPONSE ==========
+Booking ID: 2229
+HTTP Status: 200
+Partial Update Payload:
+{
+  "firstname": "Namra PATCH Updated",
+  "totalprice": 3000
+}
+Response Body:
+{
+  "firstname": "Namra PATCH Updated",
+  "lastname": "Kanwal",
+  "totalprice": 3000,
+  "depositpaid": true,
+  "bookingdates": {
+    "checkin": "2026-11-01",
+    "checkout": "2026-11-05"
+  },
+  "additionalneeds": "Breakfast"
+}
+============================================
+
